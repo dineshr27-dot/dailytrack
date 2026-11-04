@@ -1,291 +1,147 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#111a31">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="DailyTrack">
-<link rel="manifest" href="./manifest.webmanifest">
-<link rel="apple-touch-icon" href="./icon-192.png">
-<title>My Daily Tracker</title>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#faf8ff"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="DailyTrack">
+<title>DailyTrack — Personal OS</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f5f7fb;--panel:#fff;--text:#172033;--muted:#718096;--line:#e6eaf1;--accent:#5b67e8;--accent2:#e9ebff;--green:#159b72;--red:#d94b62;--amber:#c98722;--shadow:0 8px 28px rgba(24,39,75,.06)}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}
-button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 14px;background:var(--accent);color:white;font-weight:650}button.secondary{background:#eef0f6;color:#344054}button.danger{background:#fff0f1;color:var(--red)}button.small{padding:6px 9px;font-size:12px}
-.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}.sidebar{background:#111a31;color:#fff;padding:24px 16px;display:flex;flex-direction:column;gap:24px}.brand{font-size:20px;font-weight:800;padding:0 10px}.brand span{color:#aeb5ff}.nav{display:grid;gap:6px}.nav button{background:transparent;color:#c5cce0;text-align:left;font-weight:550}.nav button.active,.nav button:hover{background:#273251;color:#fff}.side-note{margin-top:auto;color:#aab4cb;font-size:12px;padding:10px}
-main{padding:28px;max-width:1500px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px}.eyebrow{color:var(--muted);font-size:13px}.top h1{margin:2px 0;font-size:27px}.top-actions{display:flex;gap:8px;flex-wrap:wrap}
-.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:18px}.two{grid-template-columns:1.25fr .75fr}.three{grid-template-columns:repeat(3,minmax(0,1fr))}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);min-width:0}.card h3{margin:0 0 14px;font-size:15px}.stat-num{font-size:28px;font-weight:800;margin:4px 0}.muted{color:var(--muted)}.smalltext{font-size:12px;color:var(--muted)}.progress{height:8px;background:#edf0f6;border-radius:20px;overflow:hidden;margin-top:10px}.progress>i{display:block;height:100%;background:var(--accent);border-radius:20px}.section{display:none}.section.active{display:block}.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 18px}.section-head h2{margin:0;font-size:22px}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.field{display:flex;flex-direction:column;gap:5px;min-width:0}.field label{font-size:12px;color:var(--muted);font-weight:650}.field input,.field select,.field textarea,input,select,textarea{border:1px solid var(--line);border-radius:9px;padding:10px;background:#fff;color:var(--text);min-width:0}.field textarea{min-height:90px;resize:vertical}.form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}.form .wide{grid-column:span 2}.form .full{grid-column:1/-1}.list{display:grid;gap:9px}.item{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;align-items:center;gap:10px}.item-main{flex:1;min-width:0}.item-title{font-weight:650;overflow-wrap:anywhere}.item-meta{font-size:12px;color:var(--muted)}.item.done .item-title{text-decoration:line-through;color:#929bad}.pill{display:inline-flex;padding:3px 8px;border-radius:20px;background:#eef0ff;color:#4c56c9;font-size:11px;font-weight:700}.pill.green{background:#e7f7f1;color:#12805e}.pill.red{background:#fff0f1;color:#c83e56}.empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}
-canvas{width:100%;height:220px;display:block}.barlist{display:grid;gap:12px}.barrow{display:grid;grid-template-columns:90px 1fr 42px;gap:8px;align-items:center;font-size:12px}.bartrack{height:9px;background:#edf0f6;border-radius:20px;overflow:hidden}.bartrack i{height:100%;display:block;background:var(--accent);border-radius:20px}.checkline{display:flex;align-items:center;gap:9px}.checkline input{width:17px;height:17px;accent-color:var(--accent)}
-.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--muted);font-weight:650}.right{text-align:right}.note{background:#fff9e9;border:1px solid #f4e7bf;border-radius:12px;padding:12px;color:#745a1c;font-size:13px}
-.toast{position:fixed;bottom:20px;right:20px;background:#172033;color:white;padding:12px 16px;border-radius:10px;box-shadow:var(--shadow);display:none;z-index:5}.modalback{position:fixed;inset:0;background:#10182877;display:none;align-items:center;justify-content:center;padding:18px;z-index:4}.modal{background:white;border-radius:16px;padding:22px;width:min(520px,100%);max-height:90vh;overflow:auto}.modal h3{margin-top:0}.modal .form{grid-template-columns:1fr 1fr}.modal .full{grid-column:1/-1}
-@media(max-width:900px){
-  .app{grid-template-columns:1fr}
-  .sidebar{padding:14px 16px 0;gap:8px;background:transparent;color:var(--text)}
-  .brand{padding:0 2px;color:var(--text);font-size:19px}
-  .brand span{color:var(--accent)}
-  .nav{display:flex;overflow-x:auto;gap:6px;padding:2px 0 10px;scrollbar-width:none}
-  .nav::-webkit-scrollbar{display:none}
-  .nav button{white-space:nowrap;padding:9px 12px;background:#e9edf6;color:#42506a;flex:0 0 auto}
-  .nav button.active,.nav button:hover{background:var(--accent);color:white}
-  .side-note{display:none}
-  main{padding:18px}
-  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .two,.three{grid-template-columns:1fr}
+:root{--bg:#faf8ff;--surface:#fff;--surface2:#f2f3ff;--surface3:#eaedff;--ink:#101b33;--muted:#74758a;--line:#e5e6f0;--primary:#6658e8;--primary-dark:#4d3cce;--lav:#efedff;--green:#087a5b;--greenbg:#e4f8ef;--amber:#a86713;--amberbg:#fff3df;--red:#b83b4b;--redbg:#ffebed;--shadow:0 8px 28px #25255b0b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px Inter,system-ui,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #6658e844;outline-offset:2px}
+.shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}.side{position:sticky;top:0;height:100vh;padding:26px 16px;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:25px}.logo{font:800 22px "Plus Jakarta Sans";letter-spacing:-1px;padding:0 12px}.logo span{color:var(--primary)}.nav{display:grid;gap:5px}.nav button{background:transparent;color:#62657b;text-align:left;padding:12px 14px;border-radius:12px;font-weight:600;display:flex;gap:13px;align-items:center}.nav button.active,.nav button:hover{background:var(--lav);color:var(--primary-dark)}.nav .ico{width:20px;text-align:center;font-size:17px}.sidebottom{margin-top:auto;padding:12px;color:var(--muted);font-size:12px;line-height:1.7}
+main{max-width:1500px;width:100%;padding:32px 36px 70px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:25px}.greet{color:var(--muted);font-size:13px}.top h1{font:700 27px "Plus Jakarta Sans";margin:4px 0}.actions{display:flex;gap:9px}.btn{padding:11px 15px;border-radius:11px;background:var(--primary);color:white;font-weight:650}.btn.soft{background:var(--lav);color:var(--primary-dark)}.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}.btn.red{background:var(--redbg);color:var(--red)}
+.page{display:none}.page.active{display:block}.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:17px}.two{grid-template-columns:1.2fr .8fr}.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:17px;padding:19px;box-shadow:var(--shadow);min-width:0}.card h3{font:700 15px "Plus Jakarta Sans";margin:0 0 14px}.statlabel{font-size:12px;color:var(--muted)}.statvalue{font:700 27px "Plus Jakarta Sans";margin:7px 0 2px}.statfoot{font-size:11px;color:var(--muted)}.staticon{float:right;width:36px;height:36px;border-radius:12px;background:var(--lav);color:var(--primary);display:grid;place-items:center}.progress{height:8px;border-radius:9px;background:#eff0f8;overflow:hidden;margin-top:11px}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),#a59aff);border-radius:9px}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:3px 0 17px}.sectionhead h2{font:700 22px "Plus Jakarta Sans";margin:0}.muted{color:var(--muted)}.small{font-size:12px}.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.between{justify-content:space-between}
+.task{display:flex;align-items:center;gap:11px;border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0}.task input{accent-color:var(--primary);width:18px;height:18px}.taskmain{flex:1;min-width:0}.taskname{font-weight:650;overflow-wrap:anywhere}.task.done .taskname{text-decoration:line-through;color:#9293a5}.meta{font-size:11px;color:var(--muted);margin-top:4px}.tag{font-size:10px;font-weight:700;padding:4px 8px;border-radius:99px;background:var(--lav);color:var(--primary-dark);white-space:nowrap}.tag.green{background:var(--greenbg);color:var(--green)}.tag.amber{background:var(--amberbg);color:var(--amber)}.tag.red{background:var(--redbg);color:var(--red)}
+.form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px}.field{display:grid;gap:5px}.field label{font-size:11px;color:var(--muted);font-weight:700}.field input,.field select,.field textarea,input,select,textarea{width:100%;min-width:0;border:1px solid var(--line);border-radius:10px;padding:10px 11px;background:#fdfdff;color:var(--ink)}.field textarea{min-height:85px;resize:vertical}.wide{grid-column:span 2}.full{grid-column:1/-1}.list{display:grid;gap:7px}.empty{padding:25px;text-align:center;border:1px dashed var(--line);border-radius:13px;color:var(--muted)}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.chip{padding:8px 12px;border-radius:99px;background:#fff;border:1px solid var(--line);color:#62657b;font-size:12px}.chip.active{background:var(--lav);color:var(--primary-dark);border-color:#d9d4ff}.chart{height:180px;display:flex;align-items:end;gap:12px;padding:12px 6px 0}.barcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:end}.bar{width:min(32px,70%);min-height:2px;background:linear-gradient(180deg,#9a90ff,var(--primary));border-radius:7px 7px 2px 2px}.barlabel,.barval{font-size:10px;color:var(--muted)}.barval{color:var(--ink);font-weight:700}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.calday{text-align:center;padding:8px 2px;border-radius:10px;min-height:62px;background:#fff;border:1px solid var(--line);font-size:12px}.calday.head{border:0;background:transparent;color:var(--muted);min-height:25px;font-weight:700}.calday.today{border:2px solid var(--primary);background:var(--lav)}.calday.selected{background:var(--primary);color:white}.dot{width:5px;height:5px;border-radius:50%;background:var(--primary);display:inline-block;margin:2px}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#202442;color:white;padding:12px 17px;border-radius:12px;display:none;z-index:10}
+.bottomnav{display:none}.modalback{position:fixed;inset:0;background:#10132966;display:none;align-items:center;justify-content:center;padding:16px;z-index:20}.modal{background:white;border-radius:18px;padding:20px;width:min(520px,100%);max-height:90vh;overflow:auto}.modal h3{font:700 18px "Plus Jakarta Sans";margin:0 0 14px}.modalactions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+@media(max-width:950px){.shell{grid-template-columns:1fr}.side{display:none}main{padding:22px 20px 100px}.bottomnav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:15;background:#ffffffed;backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:7px 5px calc(7px + env(safe-area-inset-bottom));justify-content:space-around}.bottomnav button{background:transparent;color:#73758b;font-size:10px;display:grid;gap:3px;justify-items:center;min-width:52px;padding:5px}.bottomnav button.active{color:var(--primary);font-weight:700}.bottomnav b{font-size:18px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.two,.three{grid-template-columns:1fr}}
+@media(max-width:580px){
+ body{font-size:14px;background:#faf8ff;-webkit-tap-highlight-color:transparent}
+ main{padding:calc(13px + env(safe-area-inset-top)) 12px calc(112px + env(safe-area-inset-bottom))}
+ .top{align-items:center;margin-bottom:17px;gap:8px}.top h1{font-size:22px;line-height:1.2;margin:5px 0}.greet{font-size:11px;line-height:1.45}.top .actions{gap:6px}.top .actions .ghost{display:none}.top .actions .btn{min-height:42px;padding:10px 12px;font-size:12px;white-space:nowrap}
+ .stats{gap:9px;margin-bottom:12px}.card{padding:14px;border-radius:16px;box-shadow:0 5px 18px #25255b09}.card h3{font-size:14px;margin-bottom:11px}.statvalue{font-size:23px;margin:6px 0 1px}.statlabel,.statfoot{font-size:10px}.staticon{width:31px;height:31px;border-radius:10px}
+ .grid{gap:11px}.two,.three{grid-template-columns:1fr}.sectionhead{margin:2px 0 13px;align-items:center}.sectionhead h2{font-size:20px}.sectionhead .btn{min-height:42px}
+ .form{grid-template-columns:1fr 1fr;gap:9px}.form .wide{grid-column:span 2}.form .full{grid-column:1/-1}.field label{font-size:10px}.field input,.field select,.field textarea,input,select,textarea{min-height:44px;font-size:14px;padding:11px;border-radius:11px}.field textarea{min-height:95px}
+ .btn,.chip{min-height:42px}.btn{padding:10px 13px}.task{padding:12px 10px;gap:9px;margin:7px 0;border-radius:13px;min-height:58px}.task input{width:21px;height:21px;flex:0 0 21px}.taskname{font-size:13px;line-height:1.35}.meta{font-size:10px;line-height:1.4}.tag{font-size:9px;padding:5px 7px}.task .btn.red{min-width:34px;min-height:34px;padding:5px 8px}
+ .chips{overflow-x:auto;flex-wrap:nowrap;padding:2px 0 5px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}.chip{white-space:nowrap;flex:0 0 auto;padding:8px 13px}
+ .chart{height:155px;gap:5px;padding:9px 0 0}.bar{width:min(25px,70%)}.barlabel,.barval{font-size:9px}.calendar{gap:3px}.calday{min-height:48px;padding:6px 1px;font-size:10px;border-radius:8px}.calday.head{min-height:23px}.empty{padding:21px 13px;font-size:12px}
+ .bottomnav{padding:7px 4px calc(7px + env(safe-area-inset-bottom));min-height:64px;box-shadow:0 -5px 22px #2024420b;gap:2px}.bottomnav button{flex:1;min-width:0;min-height:48px;border-radius:12px;font-size:10px;gap:2px;padding:5px 2px}.bottomnav button.active{background:var(--lav)}.bottomnav b{font-size:19px;line-height:1.1}
+ .toast{bottom:calc(82px + env(safe-area-inset-bottom));width:max-content;max-width:calc(100% - 28px);text-align:center}.modalback{align-items:flex-end;padding:0}.modal{width:100%;max-height:88vh;border-radius:20px 20px 0 0;padding:20px 16px calc(18px + env(safe-area-inset-bottom))}
 }
-@media(max-width:600px){
-  body{font-size:14px}
-  .sidebar{
-    position:fixed;z-index:10;left:0;right:0;bottom:0;
-    padding:7px 7px calc(7px + env(safe-area-inset-bottom));
-    background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
-    border-top:1px solid var(--line);box-shadow:0 -5px 22px rgba(24,39,75,.09)
-  }
-  .brand{display:none}
-  .nav{padding:0;gap:3px;justify-content:flex-start}
-  .nav button{
-    flex:0 0 auto;min-width:74px;max-width:88px;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:2px;padding:7px 6px;border-radius:11px;font-size:10px;line-height:1.2;
-    white-space:normal;text-align:center
-  }
-  main{padding:14px 12px calc(104px + env(safe-area-inset-bottom))}
-  .top{align-items:flex-start;flex-direction:column;gap:12px;margin-bottom:17px}
-  .top h1{font-size:21px;line-height:1.2}
-  .top-actions{width:100%}
-  .top-actions button{flex:1;min-height:44px}
-  .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-  .card{padding:14px;border-radius:14px}
-  .stat-num{font-size:24px}
-  .form{grid-template-columns:1fr;gap:9px}
-  .form .wide,.form .full{grid-column:1}
-  .field input,.field select,.field textarea,input,select,textarea{width:100%;min-height:44px;font-size:16px}
-  .field textarea{min-height:100px}
-  button{min-height:42px}
-  .section-head{align-items:flex-start;flex-direction:row;flex-wrap:wrap}
-  .section-head h2{font-size:20px}
-  .item{padding:10px;gap:8px}
-  .item-title{font-size:13px}
-  .item-meta{font-size:11px}
-  .item button.small{min-width:34px;min-height:34px;padding:5px}
-  .pill{font-size:10px}
-  .barrow{grid-template-columns:62px 1fr 26px}
-  canvas{height:190px}
-  .tablewrap{margin:0 -4px}
+@media(min-width:581px) and (max-width:950px){main{padding:24px 22px 110px}.bottomnav button{min-height:48px}}
+
+</style>
+<style id="dailytrack-mobile-bottomnav-fix">
+/* Mobile navigation fix: replace the desktop side rail with a fixed bottom bar. */
+@media screen and (max-width: 768px) {
+  html, body { min-height: 100%; overflow-x: hidden; }
+  .shell { display: block !important; grid-template-columns: minmax(0, 1fr) !important; width: 100%; min-height: 100dvh; }
+  .side { display: none !important; }
+  main { width: 100%; max-width: 100%; margin: 0; padding: calc(14px + env(safe-area-inset-top)) 13px calc(112px + env(safe-area-inset-bottom)) !important; }
+  .bottomnav { display: flex !important; position: fixed !important; left: 0; right: 0; bottom: 0; z-index: 9999; width: 100%; min-height: 62px; padding: 7px 5px calc(7px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.97); backdrop-filter: blur(16px); border-top: 1px solid #e5e6f0; box-shadow: 0 -5px 20px rgba(35,36,75,.08); justify-content: space-around; align-items: center; }
+  .bottomnav button { flex: 1 1 0; min-width: 0; min-height: 48px; padding: 5px 2px; border: 0; border-radius: 10px; background: transparent; color: #73758b; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 10px; line-height: 1.1; white-space: nowrap; }
+  .bottomnav button.active { color: #4d3cce; background: #efedff; font-weight: 700; }
+  .bottomnav button b { display: block; font-size: 19px; line-height: 1; font-weight: 500; }
 }
-@media(max-width:380px){
-  main{padding-left:9px;padding-right:9px}
-  .nav button{min-width:68px;font-size:9px}
-  .stats{gap:7px}
-  .stat-num{font-size:21px}
+@media screen and (max-width: 380px) {
+  .bottomnav button { font-size: 9px; }
+  .bottomnav button b { font-size: 18px; }
+  main { padding-left: 10px !important; padding-right: 10px !important; }
 }
 </style>
-</head>
-<body>
-<div class="app">
-<aside class="sidebar">
-  <div class="brand">daily<span>track.</span></div>
-  <nav class="nav" id="nav">
-    <button class="active" data-page="dashboard">▦ &nbsp; Dashboard</button>
-    <button data-page="tasks">☑ &nbsp; Daily tasks</button>
-    <button data-page="study">▤ &nbsp; Study & jobs</button>
-    <button data-page="workout">◉ &nbsp; Workout</button>
-    <button data-page="habits">✦ &nbsp; Habits</button>
-    <button data-page="expenses">₹ &nbsp; Expenses</button>
-    <button data-page="notes">▧ &nbsp; Notes & reminders</button>
-    <button data-page="reports">▥ &nbsp; Reports</button>
-  </nav>
-  <div class="side-note">Your day, one small step at a time.<br>Data is saved in this browser.</div>
-</aside>
+
+</head><body>
+<div class="shell">
+<aside class="side"><div class="logo">daily<span>track.</span></div><nav class="nav" id="sidenav">
+<button class="active" data-page="dashboard"><span class="ico">⌂</span> Dashboard</button>
+<button data-page="tasks"><span class="ico">☑</span> Daily tasks</button>
+<button data-page="calendar"><span class="ico">▦</span> Calendar</button>
+<button data-page="trackers"><span class="ico">◈</span> Trackers hub</button>
+<button data-page="reports"><span class="ico">▥</span> Reports</button>
+<button data-page="notes"><span class="ico">▤</span> Notes & reminders</button>
+</nav><div class="sidebottom">Your personal operating system.<br>Private by design · Stored on this device.</div></aside>
 <main>
-<header class="top">
-  <div><div class="eyebrow" id="todayLabel"></div><h1 id="pageTitle">Good day. Let's make progress.</h1><div class="eyebrow">A simple place to plan, track and reflect.</div></div>
-  <div class="top-actions"><button class="secondary" id="notifyBtn">Enable reminders</button><button id="quickAdd">+ Add task</button></div>
-</header>
+<header class="top"><div><div class="greet" id="dateLabel"></div><h1 id="pageTitle">Good day, Dinesh ✨</h1><div class="greet">Make today count, one small step at a time.</div></div><div class="actions"><button class="btn ghost" onclick="exportData()">Export backup</button><button class="btn" onclick="openTask()">＋ Add task</button></div></header>
 
-<section class="section active" id="dashboard">
-  <div class="grid stats">
-    <div class="card"><div class="muted smalltext">Tasks completed today</div><div class="stat-num" id="statTasks">0/0</div><div class="progress"><i id="taskProgress" style="width:0%"></i></div></div>
-    <div class="card"><div class="muted smalltext">Habit check-ins</div><div class="stat-num" id="statHabits">0/0</div><div class="smalltext">Today's habits</div></div>
-    <div class="card"><div class="muted smalltext">Workout minutes</div><div class="stat-num" id="statWorkout">0</div><div class="smalltext">Logged today</div></div>
-    <div class="card"><div class="muted smalltext">Today's spending</div><div class="stat-num" id="statSpend">₹0</div><div class="smalltext">Expenses recorded</div></div>
-  </div>
-  <div class="grid two">
-    <div class="card"><h3>Today's focus</h3><div id="dashTasks" class="list"></div></div>
-    <div class="card"><h3>Quick reflection</h3><div class="field"><label>What is the one important thing today?</label><textarea id="focusNote" placeholder="e.g. Finish Python practice and apply to two jobs..."></textarea></div><button style="margin-top:10px" id="saveFocus">Save focus</button><div class="note" style="margin-top:14px">Tip: choose 1–3 important tasks first. A realistic plan is easier to complete than a long wish list.</div></div>
-  </div>
-  <div class="grid two" style="margin-top:16px">
-    <div class="card"><h3>This week · task completion</h3><canvas id="weeklyChart" width="600" height="220"></canvas></div>
-    <div class="card"><h3>This week · spending</h3><canvas id="expenseChart" width="600" height="220"></canvas></div>
-  </div>
-</section>
-
-<section class="section" id="tasks">
-  <div class="section-head"><h2>Daily tasks</h2><button onclick="openModal('task')">+ New task</button></div>
-  <div class="card"><div class="form">
-    <div class="field wide"><label>Task</label><input id="taskName" placeholder="What needs to get done?"></div>
-    <div class="field"><label>Category</label><select id="taskCat"><option>Personal</option><option>Study</option><option>Job search</option><option>Project</option><option>Workout</option><option>Other</option></select></div>
-    <div class="field"><label>Due date</label><input id="taskDate" type="date"></div>
-    <div class="field"><label>Priority</label><select id="taskPriority"><option>Medium</option><option>High</option><option>Low</option></select></div>
-    <div class="field"><label>Reminder time (optional)</label><input id="taskTime" type="time"></div>
-  </div><button id="addTask">Add task</button></div>
-  <div class="row" style="margin:14px 0"><select id="taskFilter"><option value="all">All tasks</option><option value="today">Today</option><option value="pending">Pending</option><option value="done">Completed</option></select><span class="smalltext" id="taskCount"></span></div>
-  <div id="taskList" class="list"></div>
-</section>
-
-<section class="section" id="study">
-  <div class="section-head"><h2>Study & job tracking</h2></div>
-  <div class="card"><h3>Log a study session or job-search action</h3><div class="form">
-    <div class="field"><label>Type</label><select id="studyType"><option>Study</option><option>Job application</option><option>Interview</option><option>Project</option></select></div>
-    <div class="field wide"><label>Topic / company / activity</label><input id="studyTitle" placeholder="e.g. SQL joins / AI Engineer application"></div>
-    <div class="field"><label>Date</label><input id="studyDate" type="date"></div>
-    <div class="field"><label>Duration (minutes)</label><input id="studyDuration" type="number" min="0" placeholder="60"></div>
-    <div class="field full"><label>Outcome / notes</label><input id="studyNotes" placeholder="What did you learn? Application status? Next step?"></div>
-  </div><button id="addStudy">Save entry</button></div>
-  <div class="grid stats" style="margin-top:16px">
-    <div class="card"><div class="smalltext">Study time this month</div><div class="stat-num" id="studyHours">0h</div></div>
-    <div class="card"><div class="smalltext">Applications logged</div><div class="stat-num" id="applications">0</div></div>
-    <div class="card"><div class="smalltext">Interviews logged</div><div class="stat-num" id="interviews">0</div></div>
-    <div class="card"><div class="smalltext">Project sessions</div><div class="stat-num" id="projects">0</div></div>
-  </div>
-  <div class="card"><h3>History</h3><div id="studyList" class="list"></div></div>
-</section>
-
-<section class="section" id="workout">
-  <div class="section-head"><h2>Workout tracker</h2></div>
-  <div class="card"><h3>Log workout</h3><div class="form">
-    <div class="field"><label>Date</label><input id="workDate" type="date"></div>
-    <div class="field"><label>Workout</label><select id="workType"><option>Strength</option><option>Resistance band</option><option>Push-ups / Pull-ups</option><option>Walking</option><option>Mobility</option><option>Other</option></select></div>
-    <div class="field"><label>Duration (minutes)</label><input id="workDuration" type="number" min="1" placeholder="30"></div>
-    <div class="field"><label>Sets / details</label><input id="workDetails" placeholder="e.g. 3 sets, light resistance"></div>
-  </div><button id="addWorkout">Save workout</button></div>
-  <div class="card" style="margin-top:16px"><h3>Workout history</h3><div id="workList" class="list"></div></div>
-</section>
-
-<section class="section" id="habits">
-  <div class="section-head"><h2>Habit tracker</h2><button onclick="openModal('habit')">+ Add habit</button></div>
-  <div class="card"><h3>Today's check-in</h3><div id="habitList" class="list"></div></div>
-  <div class="card" style="margin-top:16px"><h3>Your habits</h3><div id="habitManage" class="list"></div></div>
-</section>
-
-<section class="section" id="expenses">
-  <div class="section-head"><h2>Expense tracker</h2></div>
-  <div class="card"><h3>Add an expense</h3><div class="form">
-    <div class="field wide"><label>Description</label><input id="expenseName" placeholder="e.g. Lunch"></div>
-    <div class="field"><label>Amount (₹)</label><input id="expenseAmount" type="number" min="0" step=".01" placeholder="100"></div>
-    <div class="field"><label>Category</label><select id="expenseCat"><option>Food</option><option>Travel</option><option>Education</option><option>Shopping</option><option>Health</option><option>Bills</option><option>Other</option></select></div>
-    <div class="field"><label>Date</label><input id="expenseDate" type="date"></div>
-  </div><button id="addExpense">Save expense</button></div>
-  <div class="grid stats" style="margin-top:16px">
-    <div class="card"><div class="smalltext">Today</div><div class="stat-num" id="expenseToday">₹0</div></div>
-    <div class="card"><div class="smalltext">This week</div><div class="stat-num" id="expenseWeek">₹0</div></div>
-    <div class="card"><div class="smalltext">This month</div><div class="stat-num" id="expenseMonth">₹0</div></div>
-    <div class="card"><div class="smalltext">Entries this month</div><div class="stat-num" id="expenseEntries">0</div></div>
-  </div>
-  <div class="card"><h3>Expense history</h3><div id="expenseList" class="list"></div></div>
-</section>
-
-<section class="section" id="notes">
-  <div class="section-head"><h2>Daily notes & reminders</h2></div>
-  <div class="card"><div class="form">
-    <div class="field wide"><label>Note title</label><input id="noteTitle" placeholder="e.g. Today's reflection"></div>
-    <div class="field"><label>Date</label><input id="noteDate" type="date"></div>
-    <div class="field"><label>Reminder time (optional)</label><input id="noteTime" type="time"></div>
-    <div class="field full"><label>Note</label><textarea id="noteBody" placeholder="Write your thoughts, plans, or reminders..."></textarea></div>
-  </div><button id="addNote">Save note</button></div>
-  <div class="card" style="margin-top:16px"><h3>Saved notes</h3><div id="noteList" class="list"></div></div>
-  <div class="note" style="margin-top:14px">Browser reminders work only while this page is open, notifications are allowed, and the scheduled time has not passed. For reliable reminders when the app is closed, a hosted app with push notifications or calendar integration is needed.</div>
-</section>
-
-<section class="section" id="reports">
-  <div class="section-head"><h2>Weekly & monthly progress</h2><div class="row"><button class="secondary small" id="exportBtn">Export backup (JSON)</button><button class="secondary small" id="csvBtn">Export expenses (CSV)</button><button class="secondary small" id="importBtn">Import backup</button><input type="file" id="importFile" accept=".json" hidden></div></div>
-  <div class="grid two">
-    <div class="card"><h3>Weekly task completion</h3><div id="weeklyBars" class="barlist"></div></div>
-    <div class="card"><h3>Monthly overview</h3><div id="monthlySummary"></div></div>
-  </div>
-  <div class="grid two" style="margin-top:16px">
-    <div class="card"><h3>Study time · this month</h3><div class="stat-num" id="reportStudy">0h</div><div class="smalltext">Total logged minutes converted to hours</div></div>
-    <div class="card"><h3>Workout time · this month</h3><div class="stat-num" id="reportWorkout">0 min</div><div class="smalltext">Total logged minutes</div></div>
-  </div>
-</section>
-</main>
+<section class="page active" id="dashboard">
+<div class="grid stats">
+<div class="card"><span class="staticon">✓</span><div class="statlabel">Tasks completed</div><div class="statvalue" id="dTasks">0/0</div><div class="statfoot">Today's progress</div><div class="progress"><i id="dTaskBar" style="width:0%"></i></div></div>
+<div class="card"><span class="staticon">✦</span><div class="statlabel">Habit consistency</div><div class="statvalue" id="dHabits">0%</div><div class="statfoot">Today's check-ins</div><div class="progress"><i id="dHabitBar" style="width:0%"></i></div></div>
+<div class="card"><span class="staticon">◷</span><div class="statlabel">Study time</div><div class="statvalue" id="dStudy">0m</div><div class="statfoot">Logged today</div></div>
+<div class="card"><span class="staticon">₹</span><div class="statlabel">Spent today</div><div class="statvalue" id="dSpend">₹0</div><div class="statfoot">Recorded expenses</div></div>
 </div>
+<div class="grid two">
+<div class="card"><div class="row between"><h3>Today's priorities</h3><button class="btn soft small" onclick="go('tasks')">View all →</button></div><div id="dashTasks" class="list"></div></div>
+<div class="card"><h3>Daily focus</h3><div class="muted small">What matters most today?</div><textarea id="focus" placeholder="Write your one important focus..." style="margin:12px 0;min-height:100px"></textarea><button class="btn" onclick="saveFocus()">Save focus</button><div class="small muted" style="margin-top:12px">Tip: Keep your daily priorities realistic. Consistency beats perfection.</div></div>
+</div>
+<div class="grid two" style="margin-top:16px"><div class="card"><h3>This week · tasks completed</h3><div id="weekChart" class="chart"></div></div><div class="card"><h3>Quick actions</h3><div class="grid two"><button class="btn soft" onclick="go('trackers')">＋ Log study</button><button class="btn soft" onclick="go('trackers')">＋ Log workout</button><button class="btn soft" onclick="go('trackers')">＋ Add expense</button><button class="btn soft" onclick="go('notes')">＋ Write note</button></div></div></div>
+</section>
+
+<section class="page" id="tasks"><div class="sectionhead"><h2>Daily tasks</h2><button class="btn" onclick="openTask()">＋ New task</button></div>
+<div class="card"><div class="form"><div class="field wide"><label>Task name</label><input id="taskName" placeholder="What needs to get done?"></div><div class="field"><label>Category</label><select id="taskCat"><option>Personal</option><option>Study</option><option>Job</option><option>Project</option><option>Health</option></select></div><div class="field"><label>Due date</label><input id="taskDate" type="date"></div><div class="field"><label>Priority</label><select id="taskPriority"><option>Medium</option><option>High</option><option>Low</option></select></div></div><button class="btn" onclick="addTask()">Add task</button></div>
+<div class="chips"><button class="chip active" data-filter="all">All</button><button class="chip" data-filter="today">Today</button><button class="chip" data-filter="pending">Pending</button><button class="chip" data-filter="done">Completed</button></div><div id="taskList" class="list"></div></section>
+
+<section class="page" id="calendar"><div class="sectionhead"><h2>Productivity calendar</h2><div class="row"><button class="btn soft" onclick="changeMonth(-1)">←</button><b id="monthName"></b><button class="btn soft" onclick="changeMonth(1)">→</button></div></div><div class="card"><div class="calendar" id="calendarGrid"></div></div><div class="card" style="margin-top:15px"><h3 id="selectedDateTitle">Selected day</h3><div id="calendarItems"></div></div></section>
+
+<section class="page" id="trackers"><div class="sectionhead"><h2>Trackers hub</h2></div>
+<div class="grid two">
+<div class="card"><h3>Study & job activity</h3><div class="form"><div class="field"><label>Type</label><select id="studyType"><option>Study</option><option>Job application</option><option>Interview</option><option>Project</option></select></div><div class="field wide"><label>Topic / company</label><input id="studyTitle" placeholder="Python functions / Company name"></div><div class="field"><label>Duration (minutes)</label><input id="studyDuration" type="number" min="0" placeholder="45"></div><div class="field"><label>Date</label><input id="studyDate" type="date"></div><div class="field full"><label>Notes / status</label><input id="studyNotes" placeholder="What did you learn? Next step?"></div></div><button class="btn" onclick="addStudy()">Save activity</button><div id="studyList" class="list" style="margin-top:12px"></div></div>
+<div class="card"><h3>Workout log</h3><div class="form"><div class="field"><label>Workout</label><select id="workType"><option>Strength</option><option>Resistance band</option><option>Push-ups / Pull-ups</option><option>Walking</option><option>Mobility</option><option>Other</option></select></div><div class="field"><label>Minutes</label><input id="workDuration" type="number" min="1" placeholder="30"></div><div class="field"><label>Date</label><input id="workDate" type="date"></div><div class="field"><label>Details</label><input id="workDetails" placeholder="Sets / reps"></div></div><button class="btn" onclick="addWorkout()">Save workout</button><div id="workList" class="list" style="margin-top:12px"></div></div>
+<div class="card"><h3>Daily habits</h3><div class="row"><input id="habitName" placeholder="Add a habit, e.g. Read 10 minutes"><button class="btn" onclick="addHabit()">＋</button></div><div id="habitList" class="list" style="margin-top:12px"></div></div>
+<div class="card"><h3>Expense tracker</h3><div class="form"><div class="field wide"><label>Description</label><input id="expenseName" placeholder="Lunch / Travel"></div><div class="field"><label>Amount (₹)</label><input id="expenseAmount" type="number" min="0" step=".01" placeholder="120"></div><div class="field"><label>Category</label><select id="expenseCat"><option>Food</option><option>Travel</option><option>Education</option><option>Shopping</option><option>Health</option><option>Bills</option><option>Other</option></select></div><div class="field"><label>Date</label><input id="expenseDate" type="date"></div></div><button class="btn" onclick="addExpense()">Save expense</button><div id="expenseList" class="list" style="margin-top:12px"></div></div>
+</div></section>
+
+<section class="page" id="reports"><div class="sectionhead"><h2>Progress & analytics</h2><div class="row"><button class="btn soft" onclick="exportData()">Export JSON backup</button><button class="btn ghost" onclick="$('importFile').click()">Import backup</button><input id="importFile" type="file" accept=".json" hidden></div></div><div class="grid two"><div class="card"><h3>Weekly completion · Monday–Sunday</h3><div id="reportWeek" class="chart"></div></div><div class="card"><h3>Monthly overview</h3><div id="monthSummary"></div></div></div><div class="grid three" style="margin-top:16px"><div class="card"><div class="statlabel">Study this month</div><div class="statvalue" id="rStudy">0h</div></div><div class="card"><div class="statlabel">Workout this month</div><div class="statvalue" id="rWorkout">0m</div></div><div class="card"><div class="statlabel">Expenses this month</div><div class="statvalue" id="rExpense">₹0</div></div></div></section>
+
+<section class="page" id="notes"><div class="sectionhead"><h2>Notes & reminders</h2></div><div class="card"><div class="form"><div class="field wide"><label>Title</label><input id="noteTitle" placeholder="Note title"></div><div class="field"><label>Date</label><input id="noteDate" type="date"></div><div class="field"><label>Reminder time</label><input id="noteTime" type="time"></div><div class="field full"><label>Note</label><textarea id="noteBody" placeholder="Write your thoughts, plans and reminders..."></textarea></div></div><button class="btn" onclick="addNote()">Save note</button></div><div id="noteList" class="list" style="margin-top:14px"></div></section>
+</main></div>
+<nav class="bottomnav" id="bottomnav"><button class="active" data-page="dashboard"><b>⌂</b>Home</button><button data-page="tasks"><b>☑</b>Tasks</button><button data-page="calendar"><b>▦</b>Calendar</button><button data-page="trackers"><b>◈</b>Trackers</button><button data-page="reports"><b>▥</b>Reports</button></nav>
 <div class="toast" id="toast"></div>
-<div class="modalback" id="modalBack"><div class="modal"><div class="row" style="justify-content:space-between"><h3 id="modalTitle">Add item</h3><button class="secondary small" onclick="closeModal()">Close</button></div><div id="modalBody"></div></div></div>
 <script>
-const $=id=>document.getElementById(id), today=()=>{let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}, uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
-const defaultData={tasks:[],study:[],workouts:[],habits:[{id:uid(),name:"Study for 30 minutes"},{id:uid(),name:"Exercise / movement"},{id:uid(),name:"Read for 10 minutes"},{id:uid(),name:"Plan tomorrow"}],habitChecks:{},expenses:[],notes:[],focus:{}};
-let data;try{data=JSON.parse(localStorage.getItem("dailyTrackData"))||defaultData}catch(e){data=defaultData}
-function save(){localStorage.setItem("dailyTrackData",JSON.stringify(data));render()}
-function money(n){return "₹"+Number(n||0).toLocaleString("en-IN",{maximumFractionDigits:2})}
-function dateLabel(d){return d?new Date(d+"T00:00:00").toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}):""}
-function toast(s){let t=$("toast");t.textContent=s;t.style.display="block";setTimeout(()=>t.style.display="none",2300)}
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function sum(arr,fn){return arr.reduce((a,x)=>a+fn(x),0)}
-function inMonth(d){return d?.slice(0,7)===today().slice(0,7)}
-function startWeek(){let d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
-function isWeek(d){return d>=startWeek()&&d<=today()}
-function navTo(page){document.querySelectorAll(".section").forEach(x=>x.classList.toggle("active",x.id===page));document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===page));$("pageTitle").textContent=({dashboard:"Good day. Let's make progress.",tasks:"Plan your day",study:"Build skills and track opportunities",workout:"Keep moving consistently",habits:"Small habits add up",expenses:"Know where your money goes",notes:"Capture thoughts and reminders",reports:"See your progress"})[page];}
-$("nav").addEventListener("click",e=>{let b=e.target.closest("button[data-page]");if(b)navTo(b.dataset.page)});
-$("todayLabel").textContent=new Date().toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-["taskDate","studyDate","workDate","expenseDate","noteDate"].forEach(id=>$(id).value=today());
-function addTask(){let name=$("taskName").value.trim();if(!name)return toast("Enter a task first");data.tasks.push({id:uid(),name,cat:$("taskCat").value,date:$("taskDate").value||today(),priority:$("taskPriority").value,time:$("taskTime").value,done:false,created:today()});$("taskName").value="";$("taskTime").value="";save();toast("Task added")}
-$("addTask").onclick=addTask;$("quickAdd").onclick=()=>{navTo("tasks");$("taskName").focus()};
-$("taskName").addEventListener("keydown",e=>{if(e.key==="Enter")addTask()});
-$("taskFilter").onchange=renderTasks;
-function toggleTask(id){let t=data.tasks.find(x=>x.id===id);if(t)t.done=!t.done;save()}
-function del(type,id){data[type]=data[type].filter(x=>x.id!==id);save();toast("Deleted")}
-function taskHTML(t){return `<div class="item ${t.done?"done":""}"><input type="checkbox" ${t.done?"checked":""} onchange="toggleTask('${t.id}')" aria-label="Complete task"><div class="item-main"><div class="item-title">${esc(t.name)}</div><div class="item-meta">${esc(t.cat)} · ${dateLabel(t.date)} ${t.time?"· "+esc(t.time):""}</div></div><span class="pill ${t.priority==="High"?"red":""}">${esc(t.priority)}</span><button class="danger small" onclick="del('tasks','${t.id}')">×</button></div>`}
-function renderTasks(){let f=$("taskFilter").value,arr=[...data.tasks].sort((a,b)=>(a.date||"").localeCompare(b.date||""));if(f==="today")arr=arr.filter(t=>t.date===today());if(f==="pending")arr=arr.filter(t=>!t.done);if(f==="done")arr=arr.filter(t=>t.done);$("taskList").innerHTML=arr.length?arr.map(taskHTML).join(""):'<div class="empty">No tasks in this view. Add one to get started.</div>';$("taskCount").textContent=`${arr.length} shown · ${data.tasks.filter(t=>t.done).length} completed overall`}
-$("addStudy").onclick=()=>{let title=$("studyTitle").value.trim();if(!title)return toast("Enter a topic or activity");data.study.push({id:uid(),type:$("studyType").value,title,date:$("studyDate").value||today(),duration:+$("studyDuration").value||0,notes:$("studyNotes").value});["studyTitle","studyDuration","studyNotes"].forEach(x=>$(x).value="");save();toast("Entry saved")};
-$("addWorkout").onclick=()=>{let duration=+$("workDuration").value;if(!duration||duration<1)return toast("Enter workout duration");data.workouts.push({id:uid(),type:$("workType").value,date:$("workDate").value||today(),duration,details:$("workDetails").value});$("workDuration").value="";$("workDetails").value="";save();toast("Workout saved")};
-$("addExpense").onclick=()=>{let name=$("expenseName").value.trim(),amount=+$("expenseAmount").value;if(!name||amount<=0)return toast("Enter description and valid amount");data.expenses.push({id:uid(),name,amount,cat:$("expenseCat").value,date:$("expenseDate").value||today()});$("expenseName").value="";$("expenseAmount").value="";save();toast("Expense saved")};
-$("addNote").onclick=()=>{let title=$("noteTitle").value.trim(),body=$("noteBody").value.trim();if(!title&&!body)return toast("Write a note first");data.notes.push({id:uid(),title:title||"Note",body,date:$("noteDate").value||today(),time:$("noteTime").value});$("noteTitle").value="";$("noteBody").value="";$("noteTime").value="";save();toast("Note saved")};
-$("saveFocus").onclick=()=>{data.focus[today()]=$("focusNote").value;localStorage.setItem("dailyTrackData",JSON.stringify(data));toast("Focus saved")};
-function openModal(type){let body="",title="";if(type==="habit"){title="Add a habit";body='<div class="field"><label>Habit name</label><input id="newHabit" placeholder="e.g. Drink enough water"></div><button style="margin-top:12px" onclick="saveHabit()">Add habit</button>'} $("modalTitle").textContent=title;$("modalBody").innerHTML=body;$("modalBack").style.display="flex"}
-function closeModal(){$("modalBack").style.display="none"}
-function saveHabit(){let n=$("newHabit").value.trim();if(!n)return toast("Enter a habit");data.habits.push({id:uid(),name:n});closeModal();save();toast("Habit added")}
-function checkHabit(id,checked){let k=today();data.habitChecks[k]??=[];data.habitChecks[k]=checked?[...new Set([...data.habitChecks[k],id])]:data.habitChecks[k].filter(x=>x!==id);save()}
-function canvasBars(id,labels,values){let c=$(id),ctx=c.getContext("2d"),w=c.width,h=c.height;ctx.clearRect(0,0,w,h);let max=Math.max(1,...values),pad=35,base=h-35,chartH=h-65,slot=(w-pad*2)/Math.max(1,labels.length);ctx.font="12px Arial";ctx.fillStyle="#718096";ctx.textAlign="center";labels.forEach((l,i)=>{let bh=values[i]/max*chartH,x=pad+i*slot+slot*.2;ctx.fillStyle="#5b67e8";ctx.fillRect(x,base-bh,slot*.6,bh);ctx.fillStyle="#718096";ctx.fillText(l,x+slot*.3,h-12);ctx.fillStyle="#344054";ctx.fillText(values[i],x+slot*.3,Math.max(12,base-bh-7))})}
-function render(){
- const todays=data.tasks.filter(t=>t.date===today()),done=todays.filter(t=>t.done).length,pct=todays.length?done/todays.length*100:0,checks=data.habitChecks[today()]||[];
- $("statTasks").textContent=`${done}/${todays.length}`;$("taskProgress").style.width=pct+"%";$("statHabits").textContent=`${checks.length}/${data.habits.length}`;$("statWorkout").textContent=sum(data.workouts.filter(x=>x.date===today()),x=>x.duration);$("statSpend").textContent=money(sum(data.expenses.filter(x=>x.date===today()),x=>x.amount));
- $("dashTasks").innerHTML=todays.length?todays.slice(0,6).map(taskHTML).join(""):'<div class="empty">No tasks planned for today. Add a task to get started.</div>';$("focusNote").value=data.focus[today()]||"";
- renderTasks();
- let monthStudy=data.study.filter(x=>inMonth(x.date)),apps=monthStudy.filter(x=>x.type==="Job application").length,ints=monthStudy.filter(x=>x.type==="Interview").length,projs=monthStudy.filter(x=>x.type==="Project").length;
- $("studyHours").textContent=(sum(monthStudy.filter(x=>x.type==="Study"),x=>x.duration)/60).toFixed(1)+"h";$("applications").textContent=apps;$("interviews").textContent=ints;$("projects").textContent=projs;
- $("studyList").innerHTML=data.study.length?[...data.study].sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="item"><div class="item-main"><div class="item-title">${esc(x.title)}</div><div class="item-meta">${esc(x.type)} · ${dateLabel(x.date)} · ${x.duration} min ${x.notes?"· "+esc(x.notes):""}</div></div><button class="danger small" onclick="del('study','${x.id}')">×</button></div>`).join(""):'<div class="empty">No study or job entries yet.</div>';
- $("workList").innerHTML=data.workouts.length?[...data.workouts].sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="item"><div class="item-main"><div class="item-title">${esc(x.type)} · ${x.duration} min</div><div class="item-meta">${dateLabel(x.date)} ${x.details?"· "+esc(x.details):""}</div></div><button class="danger small" onclick="del('workouts','${x.id}')">×</button></div>`).join(""):'<div class="empty">No workouts logged yet.</div>';
- $("habitList").innerHTML=data.habits.length?data.habits.map(h=>`<div class="item"><label class="checkline item-main"><input type="checkbox" ${checks.includes(h.id)?"checked":""} onchange="checkHabit('${h.id}',this.checked)"><span class="item-title">${esc(h.name)}</span></label><span class="pill">${checks.includes(h.id)?"Done":"Pending"}</span></div>`).join(""):'<div class="empty">Add your first habit.</div>';
- $("habitManage").innerHTML=data.habits.map(h=>`<div class="item"><div class="item-main item-title">${esc(h.name)}</div><button class="danger small" onclick="del('habits','${h.id}')">Remove</button></div>`).join("");
- let exToday=sum(data.expenses.filter(x=>x.date===today()),x=>x.amount),exWeek=sum(data.expenses.filter(x=>isWeek(x.date)),x=>x.amount),exMonth=sum(data.expenses.filter(x=>inMonth(x.date)),x=>x.amount);
- $("expenseToday").textContent=money(exToday);$("expenseWeek").textContent=money(exWeek);$("expenseMonth").textContent=money(exMonth);$("expenseEntries").textContent=data.expenses.filter(x=>inMonth(x.date)).length;
- $("expenseList").innerHTML=data.expenses.length?[...data.expenses].sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="item"><div class="item-main"><div class="item-title">${esc(x.name)} · ${money(x.amount)}</div><div class="item-meta">${esc(x.cat)} · ${dateLabel(x.date)}</div></div><button class="danger small" onclick="del('expenses','${x.id}')">×</button></div>`).join(""):'<div class="empty">No expenses recorded yet.</div>';
- $("noteList").innerHTML=data.notes.length?[...data.notes].sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="item"><div class="item-main"><div class="item-title">${esc(x.title)}</div><div class="item-meta">${dateLabel(x.date)} ${x.time?"· Reminder "+esc(x.time):""}<br>${esc(x.body)}</div></div><button class="danger small" onclick="del('notes','${x.id}')">×</button></div>`).join(""):'<div class="empty">No notes saved yet.</div>';
- let days=[],vals=[],expvals=[];let monday=new Date();monday.setHours(0,0,0,0);monday.setDate(monday.getDate()-((monday.getDay()+6)%7));for(let i=0;i<7;i++){let d=new Date(monday);d.setDate(monday.getDate()+i);let ds=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;days.push(d.toLocaleDateString("en-IN",{weekday:"short"}));vals.push(data.tasks.filter(t=>t.date===ds&&t.done).length);expvals.push(sum(data.expenses.filter(x=>x.date===ds),x=>x.amount))}
- canvasBars("weeklyChart",days,vals);canvasBars("expenseChart",days,expvals);
- $("weeklyBars").innerHTML=days.map((d,i)=>`<div class="barrow"><span>${d}</span><div class="bartrack"><i style="width:${Math.min(100,vals[i]/Math.max(1,...vals)*100)}%"></i></div><b>${vals[i]}</b></div>`).join("");
- let monthlyTasks=data.tasks.filter(x=>inMonth(x.date)),monthlyDone=monthlyTasks.filter(x=>x.done).length;
- $("monthlySummary").innerHTML=`<div class="stat-num">${monthlyDone}/${monthlyTasks.length}</div><div class="muted smalltext">Tasks completed this month</div><div class="progress"><i style="width:${monthlyTasks.length?monthlyDone/monthlyTasks.length*100:0}%"></i></div><p class="smalltext" style="margin-top:18px">Spending: <b>${money(exMonth)}</b></p><p class="smalltext">Habits checked today: <b>${checks.length}/${data.habits.length}</b></p>`;
- $("reportStudy").textContent=(sum(monthStudy.filter(x=>x.type==="Study"),x=>x.duration)/60).toFixed(1)+"h";$("reportWorkout").textContent=sum(data.workouts.filter(x=>inMonth(x.date)),x=>x.duration)+" min";
-}
-$("exportBtn").onclick=()=>download("daily-track-backup.json",JSON.stringify(data,null,2),"application/json");
-$("csvBtn").onclick=()=>{let rows=[["Date","Description","Category","Amount"],...data.expenses.map(x=>[x.date,x.name,x.cat,x.amount])];download("expenses.csv",rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n"),"text/csv")};
-function download(name,content,type){let a=document.createElement("a"),url=URL.createObjectURL(new Blob([content],{type}));a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
-$("importBtn").onclick=()=>$("importFile").click();
-$("importFile").onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let d=JSON.parse(await f.text());if(!d.tasks||!d.habits)throw Error();data=d;save();toast("Backup imported")}catch(err){toast("Invalid backup file")}e.target.value=""};
-$("notifyBtn").onclick=async()=>{if(!("Notification"in window))return toast("Notifications are not supported in this browser");let p=await Notification.requestPermission();toast(p==="granted"?"Notifications enabled":"Permission not granted")};
-if("Notification"in window&&Notification.permission==="granted"){const fired=new Set();setInterval(()=>{let now=new Date(),hm=now.toTimeString().slice(0,5),ds=today(),minuteKey=ds+" "+hm;if(fired.has(minuteKey))return;let dueTasks=data.tasks.filter(t=>t.date===ds&&t.time===hm&&!t.done),dueNotes=data.notes.filter(n=>n.date===ds&&n.time===hm);if(dueTasks.length||dueNotes.length){fired.add(minuteKey);dueTasks.forEach(t=>new Notification("Daily Track reminder",{body:t.name}));dueNotes.forEach(n=>new Notification("Reminder: "+n.title,{body:n.body||"Your reminder"}))}},10000)}
+const $=id=>document.getElementById(id), today=()=>{let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}, uid=()=>Math.random().toString(36).slice(2)+Date.now().toString(36), money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2}), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const blank=()=>({tasks:[],study:[],workouts:[],habits:[{id:uid(),name:'Study for 30 minutes'},{id:uid(),name:'Exercise / movement'},{id:uid(),name:'Read for 10 minutes'}],checks:{},expenses:[],notes:[],focus:{}});
+let data;try{data=JSON.parse(localStorage.getItem('dailyTrackData'))||blank()}catch(e){data=blank()}
+data.tasks??=[];data.study??=[];data.workouts??=[];data.habits??=[];data.checks??=data.habitChecks??{};data.expenses??=[];data.notes??=[];data.focus??={};
+let filter='all',calMonth=new Date(),selectedDate=today();
+function persist(){localStorage.setItem('dailyTrackData',JSON.stringify(data));render();}function toast(s){let t=$('toast');t.textContent=s;t.style.display='block';setTimeout(()=>t.style.display='none',2100)}
+function go(p){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$('pageTitle').textContent=({dashboard:'Good day, Dinesh ✨',tasks:'Your daily tasks',calendar:'Your productivity calendar',trackers:'Your trackers',reports:'Your progress',notes:'Notes & reminders'})[p];}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
+$('dateLabel').textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+['taskDate','studyDate','workDate','expenseDate','noteDate'].forEach(id=>$(id).value=today());
+function openTask() {go('tasks');$('taskName').focus()}
+function addTask(){let n=$('taskName').value.trim();if(!n)return toast('Enter a task name');data.tasks.push({id:uid(),name:n,cat:$('taskCat').value,date:$('taskDate').value||today(),priority:$('taskPriority').value,done:false});$('taskName').value='';persist();toast('Task added')}
+function toggleTask(id){let t=data.tasks.find(x=>x.id===id);if(t)t.done=!t.done;persist()}
+function del(k,id){data[k]=data[k].filter(x=>x.id!==id);persist();toast('Deleted')}
+function taskCard(t){return `<div class="task ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask('${t.id}')"><div class="taskmain"><div class="taskname">${esc(t.name)}</div><div class="meta">${esc(t.cat||'Personal')} · ${esc(t.date||'')}</div></div><span class="tag ${t.priority==='High'?'red':t.priority==='Low'?'green':'amber'}">${esc(t.priority||'Medium')}</span><button class="btn red" style="padding:6px 9px" onclick="del('tasks','${t.id}')">×</button></div>`}
+document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));renderTasks()});
+function renderTasks(){let a=[...data.tasks].sort((x,y)=>(x.date||'').localeCompare(y.date||''));if(filter==='today')a=a.filter(x=>x.date===today());if(filter==='pending')a=a.filter(x=>!x.done);if(filter==='done')a=a.filter(x=>x.done);$('taskList').innerHTML=a.length?a.map(taskCard).join(''):'<div class="empty">Nothing here yet. Add a task to get started.</div>'}
+function addStudy(){let title=$('studyTitle').value.trim();if(!title)return toast('Enter a topic or company');data.study.push({id:uid(),type:$('studyType').value,title,date:$('studyDate').value||today(),duration:+$('studyDuration').value||0,notes:$('studyNotes').value});['studyTitle','studyDuration','studyNotes'].forEach(x=>$(x).value='');persist();toast('Activity saved')}
+function addWorkout(){let duration=+$('workDuration').value;if(duration<1)return toast('Enter workout minutes');data.workouts.push({id:uid(),type:$('workType').value,duration,date:$('workDate').value||today(),details:$('workDetails').value});$('workDuration').value='';$('workDetails').value='';persist();toast('Workout saved')}
+function addHabit(){let name=$('habitName').value.trim();if(!name)return toast('Enter a habit');data.habits.push({id:uid(),name});$('habitName').value='';persist()}
+function checkHabit(id,v){data.checks[today()]??=[];data.checks[today()]=v?[...new Set([...data.checks[today()],id])]:data.checks[today()].filter(x=>x!==id);persist()}
+function addExpense(){let name=$('expenseName').value.trim(),amount=+$('expenseAmount').value;if(!name||amount<=0)return toast('Enter description and amount');data.expenses.push({id:uid(),name,amount,cat:$('expenseCat').value,date:$('expenseDate').value||today()});$('expenseName').value='';$('expenseAmount').value='';persist();toast('Expense saved')}
+function addNote(){let title=$('noteTitle').value.trim(),body=$('noteBody').value.trim();if(!title&&!body)return toast('Write a note');data.notes.push({id:uid(),title:title||'Note',body,date:$('noteDate').value||today(),time:$('noteTime').value});$('noteTitle').value='';$('noteBody').value='';$('noteTime').value='';persist();toast('Note saved')}
+function saveFocus(){data.focus[today()]=$('focus').value;localStorage.setItem('dailyTrackData',JSON.stringify(data));toast('Focus saved')}
+function chart(id,labels,vals){let max=Math.max(1,...vals);$(id).innerHTML=labels.map((l,i)=>`<div class="barcol"><span class="barval">${vals[i]}</span><div class="bar" style="height:${Math.max(2,vals[i]/max*125)}px"></div><span class="barlabel">${l}</span></div>`).join('')}
+function month(d){return d.slice(0,7)===today().slice(0,7)}function weekStart(){let d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return d}
+function renderCalendar(){let y=calMonth.getFullYear(),m=calMonth.getMonth(),first=new Date(y,m,1),start=(first.getDay()+6)%7,total=new Date(y,m+1,0).getDate();$('monthName').textContent=calMonth.toLocaleDateString('en-IN',{month:'long',year:'numeric'});let h=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<div class="calday head">${x}</div>`).join('');for(let i=0;i<start;i++)h+='<div></div>';for(let day=1;day<=total;day++){let ds=`${y}-${String(m+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`,n=data.tasks.filter(t=>t.date===ds).length,cls='calday'+(ds===today()?' today':'')+(ds===selectedDate?' selected':'');h+=`<button class="${cls}" onclick="selectDate('${ds}')">${day}${n?'<br><span class="dot"></span>':''}</button>`}$('calendarGrid').innerHTML=h;renderCalendarItems()}
+function changeMonth(n){calMonth.setMonth(calMonth.getMonth()+n);renderCalendar()}function selectDate(d){selectedDate=d;renderCalendar()}
+function renderCalendarItems(){$('selectedDateTitle').textContent=new Date(selectedDate+'T00:00:00').toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});let a=data.tasks.filter(t=>t.date===selectedDate);$('calendarItems').innerHTML=a.length?a.map(taskCard).join(''):'<div class="empty">No tasks scheduled for this day.</div>'}
+function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='dailytrack-backup.json';a.click();URL.revokeObjectURL(a.href)}
+$('importFile').onchange=async e=>{try{let d=JSON.parse(await e.target.files[0].text());if(!Array.isArray(d.tasks))throw 0;data={...blank(),...d};persist();toast('Backup imported')}catch(_){toast('Invalid backup file')}e.target.value=''}
+function render(){let td=data.tasks.filter(t=>t.date===today()),done=td.filter(t=>t.done).length,checks=data.checks[today()]||[],hp=data.habits.length?Math.round(checks.length/data.habits.length*100):0,study=data.study.filter(x=>x.date===today()),spend=data.expenses.filter(x=>x.date===today()).reduce((s,x)=>s+x.amount,0);$('dTasks').textContent=`${done}/${td.length}`;$('dTaskBar').style.width=(td.length?done/td.length*100:0)+'%';$('dHabits').textContent=hp+'%';$('dHabitBar').style.width=hp+'%';$('dStudy').textContent=study.reduce((s,x)=>s+x.duration,0)+'m';$('dSpend').textContent=money(spend);$('focus').value=data.focus[today()]||'';$('dashTasks').innerHTML=td.length?td.slice(0,5).map(taskCard).join(''):'<div class="empty">No priorities yet. Add your first task.</div>';
+renderTasks();$('studyList').innerHTML=data.study.length?[...data.study].reverse().slice(0,5).map(x=>`<div class="task"><div class="taskmain"><b>${esc(x.title)}</b><div class="meta">${esc(x.type)} · ${x.date} · ${x.duration} min</div></div><button class="btn red" onclick="del('study','${x.id}')">×</button></div>`).join(''):'<div class="empty">No activity logged.</div>';
+$('workList').innerHTML=data.workouts.length?[...data.workouts].reverse().slice(0,5).map(x=>`<div class="task"><div class="taskmain"><b>${esc(x.type)} · ${x.duration} min</b><div class="meta">${x.date} ${esc(x.details)}</div></div><button class="btn red" onclick="del('workouts','${x.id}')">×</button></div>`).join(''):'<div class="empty">No workouts logged.</div>';
+$('habitList').innerHTML=data.habits.map(h=>`<div class="task"><input type="checkbox" ${checks.includes(h.id)?'checked':''} onchange="checkHabit('${h.id}',this.checked)"><div class="taskmain">${esc(h.name)}</div><button class="btn red" onclick="del('habits','${h.id}')">×</button></div>`).join('')||'<div class="empty">Add your first habit.</div>';
+$('expenseList').innerHTML=data.expenses.length?[...data.expenses].reverse().slice(0,5).map(x=>`<div class="task"><div class="taskmain"><b>${esc(x.name)} · ${money(x.amount)}</b><div class="meta">${esc(x.cat)} · ${x.date}</div></div><button class="btn red" onclick="del('expenses','${x.id}')">×</button></div>`).join(''):'<div class="empty">No expenses recorded.</div>';
+$('noteList').innerHTML=data.notes.length?[...data.notes].reverse().map(x=>`<div class="task"><div class="taskmain"><b>${esc(x.title)}</b><div class="meta">${x.date} ${esc(x.time)}<br>${esc(x.body)}</div></div><button class="btn red" onclick="del('notes','${x.id}')">×</button></div>`).join(''):'<div class="empty">No notes yet.</div>';
+let ws=weekStart(),labels=[],vals=[];for(let i=0;i<7;i++){let d=new Date(ws);d.setDate(ws.getDate()+i);let ds=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;labels.push(d.toLocaleDateString('en-IN',{weekday:'short'}));vals.push(data.tasks.filter(t=>t.date===ds&&t.done).length)}chart('weekChart',labels,vals);chart('reportWeek',labels,vals);
+let mt=data.tasks.filter(x=>month(x.date)),md=mt.filter(x=>x.done).length,mstudy=data.study.filter(x=>month(x.date)).reduce((s,x)=>s+x.duration,0),mw=data.workouts.filter(x=>month(x.date)).reduce((s,x)=>s+x.duration,0),me=data.expenses.filter(x=>month(x.date)).reduce((s,x)=>s+x.amount,0);
+$('monthSummary').innerHTML=`<div class="statvalue">${md}/${mt.length}</div><div class="muted small">Tasks completed this month</div><div class="progress"><i style="width:${mt.length?md/mt.length*100:0}%"></i></div><p class="small muted">Habit check-ins today: ${checks.length}/${data.habits.length}</p>`;$('rStudy').textContent=(mstudy/60).toFixed(1)+'h';$('rWorkout').textContent=mw+'m';$('rExpense').textContent=money(me);renderCalendar()}
 render();
-</script>
-<script>
-if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js").catch(err => console.warn("Offline setup unavailable:", err));
-  });
-}
-</script>
-</body>
-</html>
+if('serviceWorker'in navigator&&location.protocol==='https:')navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
+</script></body></html>
