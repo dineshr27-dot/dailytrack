@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111a31">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DailyTrack">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<title>My Daily Tracker</title>
+<style>
+:root{--bg:#f5f7fb;--panel:#fff;--text:#172033;--muted:#718096;--line:#e6eaf1;--accent:#5b67e8;--accent2:#e9ebff;--green:#159b72;--red:#d94b62;--amber:#c98722;--shadow:0 8px 28px rgba(24,39,75,.06)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 14px;background:var(--accent);color:white;font-weight:650}button.secondary{background:#eef0f6;color:#344054}button.danger{background:#fff0f1;color:var(--red)}button.small{padding:6px 9px;font-size:12px}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}.sidebar{background:#111a31;color:#fff;padding:24px 16px;display:flex;flex-direction:column;gap:24px}.brand{font-size:20px;font-weight:800;padding:0 10px}.brand span{color:#aeb5ff}.nav{display:grid;gap:6px}.nav button{background:transparent;color:#c5cce0;text-align:left;font-weight:550}.nav button.active,.nav button:hover{background:#273251;color:#fff}.side-note{margin-top:auto;color:#aab4cb;font-size:12px;padding:10px}
+main{padding:28px;max-width:1500px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px}.eyebrow{color:var(--muted);font-size:13px}.top h1{margin:2px 0;font-size:27px}.top-actions{display:flex;gap:8px;flex-wrap:wrap}
+.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:18px}.two{grid-template-columns:1.25fr .75fr}.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);min-width:0}.card h3{margin:0 0 14px;font-size:15px}.stat-num{font-size:28px;font-weight:800;margin:4px 0}.muted{color:var(--muted)}.smalltext{font-size:12px;color:var(--muted)}.progress{height:8px;background:#edf0f6;border-radius:20px;overflow:hidden;margin-top:10px}.progress>i{display:block;height:100%;background:var(--accent);border-radius:20px}.section{display:none}.section.active{display:block}.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 18px}.section-head h2{margin:0;font-size:22px}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.field{display:flex;flex-direction:column;gap:5px;min-width:0}.field label{font-size:12px;color:var(--muted);font-weight:650}.field input,.field select,.field textarea,input,select,textarea{border:1px solid var(--line);border-radius:9px;padding:10px;background:#fff;color:var(--text);min-width:0}.field textarea{min-height:90px;resize:vertical}.form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}.form .wide{grid-column:span 2}.form .full{grid-column:1/-1}.list{display:grid;gap:9px}.item{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;align-items:center;gap:10px}.item-main{flex:1;min-width:0}.item-title{font-weight:650;overflow-wrap:anywhere}.item-meta{font-size:12px;color:var(--muted)}.item.done .item-title{text-decoration:line-through;color:#929bad}.pill{display:inline-flex;padding:3px 8px;border-radius:20px;background:#eef0ff;color:#4c56c9;font-size:11px;font-weight:700}.pill.green{background:#e7f7f1;color:#12805e}.pill.red{background:#fff0f1;color:#c83e56}.empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}
+canvas{width:100%;height:220px;display:block}.barlist{display:grid;gap:12px}.barrow{display:grid;grid-template-columns:90px 1fr 42px;gap:8px;align-items:center;font-size:12px}.bartrack{height:9px;background:#edf0f6;border-radius:20px;overflow:hidden}.bartrack i{height:100%;display:block;background:var(--accent);border-radius:20px}.checkline{display:flex;align-items:center;gap:9px}.checkline input{width:17px;height:17px;accent-color:var(--accent)}
+.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--muted);font-weight:650}.right{text-align:right}.note{background:#fff9e9;border:1px solid #f4e7bf;border-radius:12px;padding:12px;color:#745a1c;font-size:13px}
+.toast{position:fixed;bottom:20px;right:20px;background:#172033;color:white;padding:12px 16px;border-radius:10px;box-shadow:var(--shadow);display:none;z-index:5}.modalback{position:fixed;inset:0;background:#10182877;display:none;align-items:center;justify-content:center;padding:18px;z-index:4}.modal{background:white;border-radius:16px;padding:22px;width:min(520px,100%);max-height:90vh;overflow:auto}.modal h3{margin-top:0}.modal .form{grid-template-columns:1fr 1fr}.modal .full{grid-column:1/-1}
+@media(max-width:900px){
+  .app{grid-template-columns:1fr}
+  .sidebar{padding:14px 16px 0;gap:8px;background:transparent;color:var(--text)}
+  .brand{padding:0 2px;color:var(--text);font-size:19px}
+  .brand span{color:var(--accent)}
+  .nav{display:flex;overflow-x:auto;gap:6px;padding:2px 0 10px;scrollbar-width:none}
+  .nav::-webkit-scrollbar{display:none}
+  .nav button{white-space:nowrap;padding:9px 12px;background:#e9edf6;color:#42506a;flex:0 0 auto}
+  .nav button.active,.nav button:hover{background:var(--accent);color:white}
+  .side-note{display:none}
+  main{padding:18px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .two,.three{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  body{font-size:14px}
+  .sidebar{
+    position:fixed;z-index:10;left:0;right:0;bottom:0;
+    padding:7px 7px calc(7px + env(safe-area-inset-bottom));
+    background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
+    border-top:1px solid var(--line);box-shadow:0 -5px 22px rgba(24,39,75,.09)
+  }
+  .brand{display:none}
+  .nav{padding:0;gap:3px;justify-content:flex-start}
+  .nav button{
+    flex:0 0 auto;min-width:74px;max-width:88px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:2px;padding:7px 6px;border-radius:11px;font-size:10px;line-height:1.2;
+    white-space:normal;text-align:center
+  }
+  main{padding:14px 12px calc(104px + env(safe-area-inset-bottom))}
+  .top{align-items:flex-start;flex-direction:column;gap:12px;margin-bottom:17px}
+  .top h1{font-size:21px;line-height:1.2}
+  .top-actions{width:100%}
+  .top-actions button{flex:1;min-height:44px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .card{padding:14px;border-radius:14px}
+  .stat-num{font-size:24px}
+  .form{grid-template-columns:1fr;gap:9px}
+  .form .wide,.form .full{grid-column:1}
+  .field input,.field select,.field textarea,input,select,textarea{width:100%;min-height:44px;font-size:16px}
+  .field textarea{min-height:100px}
+  button{min-height:42px}
+  .section-head{align-items:flex-start;flex-direction:row;flex-wrap:wrap}
+  .section-head h2{font-size:20px}
+  .item{padding:10px;gap:8px}
+  .item-title{font-size:13px}
+  .item-meta{font-size:11px}
+  .item button.small{min-width:34px;min-height:34px;padding:5px}
+  .pill{font-size:10px}
+  .barrow{grid-template-columns:62px 1fr 26px}
+  canvas{height:190px}
+  .tablewrap{margin:0 -4px}
+}
+@media(max-width:380px){
+  main{padding-left:9px;padding-right:9px}
+  .nav button{min-width:68px;font-size:9px}
+  .stats{gap:7px}
+  .stat-num{font-size:21px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">daily<span>track.</span></div>
+  <nav class="nav" id="nav">
+    <button class="active" data-page="dashboard">▦ &nbsp; Dashboard</button>
+    <button data-page="tasks">☑ &nbsp; Daily tasks</button>
+    <button data-page="study">▤ &nbsp; Study & jobs</button>
+    <button data-page="workout">◉ &nbsp; Workout</button>
+    <button data-page="habits">✦ &nbsp; Habits</button>
+    <button data-page="expenses">₹ &nbsp; Expenses</button>
+    <button data-page="notes">▧ &nbsp; Notes & reminders</button>
+    <button data-page="reports">▥ &nbsp; Reports</button>
+  </nav>
+  <div class="side-note">Your day, one small step at a time.<br>Data is saved in this browser.</div>
+</aside>
+<main>
+<header class="top">
+  <div><div class="eyebrow" id="todayLabel"></div><h1 id="pageTitle">Good day. Let's make progress.</h1><div class="eyebrow">A simple place to plan, track and reflect.</div></div>
+  <div class="top-actions"><button class="secondary" id="notifyBtn">Enable reminders</button><button id="quickAdd">+ Add task</button></div>
+</header>
+
+<section class="section active" id="dashboard">
+  <div class="grid stats">
+    <div class="card"><div class="muted smalltext">Tasks completed today</div><div class="stat-num" id="statTasks">0/0</div><div class="progress"><i id="taskProgress" style="width:0%"></i></div></div>
+    <div class="card"><div class="muted smalltext">Habit check-ins</div><div class="stat-num" id="statHabits">0/0</div><div class="smalltext">Today's habits</div></div>
+    <div class="card"><div class="muted smalltext">Workout minutes</div><div class="stat-num" id="statWorkout">0</div><div class="smalltext">Logged today</div></div>
+    <div class="card"><div class="muted smalltext">Today's spending</div><div class="stat-num" id="statSpend">₹0</div><div class="smalltext">Expenses recorded</div></div>
+  </div>
+  <div class="grid two">
+    <div class="card"><h3>Today's focus</h3><div id="dashTasks" class="list"></div></div>
+    <div class="card"><h3>Quick reflection</h3><div class="field"><label>What is the one important thing today?</label><textarea id="focusNote" placeholder="e.g. Finish Python practice and apply to two jobs..."></textarea></div><button style="margin-top:10px" id="saveFocus">Save focus</button><div class="note" style="margin-top:14px">Tip: choose 1–3 important tasks first. A realistic plan is easier to complete than a long wish list.</div></div>
+  </div>
+  <div class="grid two" style="margin-top:16px">
+    <div class="card"><h3>Last 7 days · task completion</h3><canvas id="weeklyChart" width="600" height="220"></canvas></div>
+    <div class="card"><h3>This month · spending</h3><canvas id="expenseChart" width="600" height="220"></canvas></div>
+  </div>
+</section>
+
+<section class="section" id="tasks">
+  <div class="section-head"><h2>Daily tasks</h2><button onclick="openModal('task')">+ New task</button></div>
+  <div class="card"><div class="form">
+    <div class="field wide"><label>Task</label><input id="taskName" placeholder="What needs to get done?"></div>
+    <div class="field"><label>Category</label><select id="taskCat"><option>Personal</option><option>Study</option><option>Job search</option><option>Project</option><option>Workout</option><option>Other</option></select></div>
+    <div class="field"><label>Due date</label><input id="taskDate" type="date"></div>
+    <div class="field"><label>Priority</label><select id="taskPriority"><option>Medium</option><option>High</option><option>Low</option></select></div>
+    <div class="field"><label>Reminder time (optional)</label><input id="taskTime" type="time"></div>
+  </div><button id="addTask">Add task</button></div>
+  <div class="row" style="margin:14px 0"><select id="taskFilter"><option value="all">All tasks</option><option value="today">Today</option><option value="pending">Pending</option><option value="done">Completed</option></select><span class="smalltext" id="taskCount"></span></div>
+  <div id="taskList" class="list"></div>
+</section>
+
+<section class="section" id="study">
+  <div class="section-head"><h2>Study & job tracking</h2></div>
+  <div class="card"><h3>Log a study session or job-search action</h3><div class="form">
+    <div class="field"><label>Type</label><select id="studyType"><option>Study</option><option>Job application</option><option>Interview</option><option>Project</option></select></div>
+    <div class="field wide"><label>Topic / company / activity</label><input id="studyTitle" placeholder="e.g. SQL joins / AI Engineer application"></div>
+    <div class="field"><label>Date</label><input id="studyDate" type="date"></div>
+    <div class="field"><label>Duration (minutes)</label><input id="studyDuration" type="number" min="0" placeholder="60"></div>
+    <div class="field full"><label>Outcome / notes</label><input id="studyNotes" placeholder="What did you learn? Application status? Next step?"></div>
+  </div><button id="addStudy">Save entry</button></div>
+  <div class="grid stats" style="margin-top:16px">
+    <div class="card"><div class="smalltext">Study time this month</div><div class="stat-num" id="studyHours">0h</div></div>
+    <div class="card"><div class="smalltext">Applications logged</div><div class="stat-num" id="applications">0</div></div>
+    <div class="card"><div class="smalltext">Interviews logged</div><div class="stat-num" id="interviews">0</div></div>
+    <div class="card"><div class="smalltext">Project sessions</div><div class="stat-num" id="projects">0</div></div>
+  </div>
+  <div class="card"><h3>History</h3><div id="studyList" class="list"></div></div>
+</section>
+
+<section class="section" id="workout">
+  <div class="section-head"><h2>Workout tracker</h2></div>
+  <div class="card"><h3>Log workout</h3><div class="form">
+    <div class="field"><label>Date</label><input id="workDate" type="date"></div>
+    <div class="field"><label>Workout</label><select id="workType"><option>Strength</option><option>Resistance band</option><option>Push-ups / Pull-ups</option><option>Walking</option><option>Mobility</option><option>Other</option></select></div>
+    <div class="field"><label>Duration (minutes)</label><input id="workDuration" type="number" min="1" placeholder="30"></div>
+    <div class="field"><label>Sets / details</label><input id="workDetails" placeholder="e.g. 3 sets, light resistance"></div>
+  </div><button id="addWorkout">Save workout</button></div>
+  <div class="card" style="margin-top:16px"><h3>Workout history</h3><div id="workList" class="list"></div></div>
+</section>
+
+<section class="section" id="habits">
+  <div class="section-head"><h2>Habit tracker</h2><button onclick="openModal('habit')">+ Add habit</button></div>
+  <div class="card"><h3>Today's check-in</h3><div id="habitList" class="list"></div></div>
+  <div class="card" style="margin-top:16px"><h3>Your habits</h3><div id="habitManage" class="list"></div></div>
+</section>
+
+<section class="section" id="expenses">
+  <div class="section-head"><h2>Expense tracker</h2></div>
+  <div class="card"><h3>Add an expense</h3><div class="form">
+    <div class="field wide"><label>Description</label><input id="expenseName" placeholder="e.g. Lunch"></div>
+    <div class="field"><label>Amount (₹)</label><input id="expenseAmount" type="number" min="0" step=".01" placeholder="100"></div>
+    <div class="field"><label>Category</label><select id="expenseCat"><option>Food</option><option>Travel</option><option>Education</option><option>Shopping</option><option>Health</option><option>Bills</option><option>Other</option></select></div>
+    <div class="field"><label>Date</label><input id="expenseDate" type="date"></div>
+  </div><button id="addExpense">Save expense</button></div>
+  <div class="grid stats" style="margin-top:16px">
+    <div class="card"><div class="smalltext">Today</div><div class="stat-num" id="expenseToday">₹0</div></div>
+    <div class="card"><div class="smalltext">This week</div><div class="stat-num" id="expenseWeek">₹0</div></div>
+    <div class="card"><div class="smalltext">This month</div><div class="stat-num" id="expenseMonth">₹0</div></div>
+    <div class="card"><div class="smalltext">Entries this month</div><div class="stat-num" id="expenseEntries">0</div></div>
+  </div>
+  <div class="card"><h3>Expense history</h3><div id="expenseList" class="list"></div></div>
+</section>
+
+<section class="section" id="notes">
+  <div class="section-head"><h2>Daily notes & reminders</h2></div>
+  <div class="card"><div class="form">
+    <div class="field wide"><label>Note title</label><input id="noteTitle" placeholder="e.g. Today's reflection"></div>
+    <div class="field"><label>Date</label><input id="noteDate" type="date"></div>
+    <div class="field"><label>Reminder time (optional)</label><input id="noteTime" type="time"></div>
+    <div class="field full"><label>Note</label><textarea id="noteBody" placeholder="Write your thoughts, plans, or reminders..."></textarea></div>
+  </div><button id="addNote">Save note</button></div>
+  <div class="card" style="margin-top:16px"><h3>Saved notes</h3><div id="noteList" class="list"></div></div>
+  <div class="note" style="margin-top:14px">Browser reminders work only while this page is open, notifications are allowed, and the scheduled time has not passed. For reliable reminders when the app is closed, a hosted app with push notifications or calendar integration is needed.</div>
+</section>
+
+<section class="section" id="reports">
+  <div class="section-head"><h2>Weekly & monthly progress</h2><div class="row"><button class="secondary small" id="exportBtn">Export backup (JSON)</button><button class="secondary small" id="csvBtn">Export expenses (CSV)</button><button class="secondary small" id="importBtn">Import backup</button><input type="file" id="importFile" accept=".json" hidden></div></div>
+  <div class="grid two">
+    <div class="card"><h3>Weekly task completion</h3><div id="weeklyBars" class="barlist"></div></div>
+    <div class="card"><h3>Monthly overview</h3><div id="monthlySummary"></div></div>
+  </div>
+  <div class="grid two" style="margin-top:16px">
+    <div class="card"><h3>Study time · this month</h3><div class="stat-num" id="reportStudy">0h</div><div class="smalltext">Total logged minutes converted to hours</div></div>
+    <div class="card"><h3>Workout time · this month</h3><div class="stat-num" id="reportWorkout">0 min</div><div class="smalltext">Total logged minutes</div></div>
+  </div>
+</section>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+<div class="modalback" id="modalBack"><div class="modal"><div class="row" style="justify-content:space-between"><h3 id="modalTitle">Add item</h3><button class="secondary small" onclick="closeModal()">Close</button></div><div id="modalBody"></div></div></div>
+<script>
+const $=id=>document.getElementById(id), today=()=>{let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}, uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const defaultData={tasks:[],study:[],workouts:[],habits:[{id:uid(),name:"Study for 30 minutes"},{id:uid(),name:"Exercise / movement"},{id:uid(),name:"Read for 10 minutes"},{id:uid(),name:"Plan tomorrow"}],habitChecks:{},expenses:[],notes:[],focus:{}};
+let data;try{data=JSON.parse(localStorage.getItem("dailyTrackData"))||defaultData}catch(e){data=defaultData}
+function save(){localStorage.setItem("dailyTrackData",JSON.stringify(data));render()}
+function money(n){return "₹"+Number(n||0).toLocaleString("en-IN",{maximumFractionDigits:2})}
+function dateLabel(d){return d?new Date(d+"T00:00:00").toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}):""}
+function toast(s){let t=$("toast");t.textContent=s;t.style.display="block";setTimeout(()=>t.style.display="none",2300)}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function sum(arr,fn){return arr.reduce((a,x)=>a+fn(x),0)}
+function inMonth(d){return d?.slice(0,7)===today().slice(0,7)}
+function startWeek(){let d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function isWeek(d){return d>=startWeek()&&d<=today()}
+function navTo(page){document.querySelectorAll(".section").forEach(x=>x.classList.toggle("active",x.id===page));document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===page));$("pageTitle").textContent=({dashboard:"Good day. Let's make progress.",tasks:"Plan your day",study:"Build skills and track opportunities",workout:"Keep moving consistently",habits:"Small habits add up",expenses:"Know where your money goes",notes:"Capture thoughts and reminders",reports:"See your progress"})[page];}
+$("nav").addEventListener("click",e=>{let b=e.target.closest("button[data-page]");if(b)navTo(b.dataset.page)});
+$("todayLabel").textContent=new Date().toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+["taskDate","studyDate","workDate","expenseDate","noteDate"].forEach(id=>$(id).value=today());
+function addTask(){let name=$("taskName").value.trim();if(!name)return toast("Enter a task first");data.tasks.push({id:uid(),name,cat:$("taskCat").value,date:$("taskDate").value||today(),priority:$("taskPriority").value,time:$("taskTime").value,done:false,created:today()});$("taskName").value="";$("taskTime").value="";save();toast("Task added")}
+$("addTask").onclick=addTask;$("quickAdd").onclick=()=>{navTo("tasks");$("taskName").focus()};
+$("taskName").addEventListener("keydown",e=>{if(e.key==="Enter")addTask()});
+$("taskFilter").onchange=renderTasks;
+function toggleTask(id){let t=data.tasks.find(x=>x.id===id);if(t)t.done=!t.done;save()}
+function del(type,id){data[type]=data[type].filter(x=>x.id!==id);save();toast("Deleted")}
+function taskHTML(t){return `<div class="item ${t.done?"done":""}"><input type="checkbox" ${t.done?"checked":""} onchange="toggleTask('${t.id}')" aria-label="Complete task"><div class="item-main"><div class="item-title">${esc(t.name)}</div><div class="item-meta">${esc(t.cat)} · ${dateLabel(t.date)} ${t.time?"· "+esc(t.time):""}</div></div><span class="pill ${t.priority==="High"?"red":""}">${esc(t.priority)}</span><button class="danger small" onclick="del('tasks','${t.id}')">×</button></div>`}
+function renderTasks(){let f=$("taskFilter").value,arr=[...data.tasks].sort((a,b)=>(a.date||"").localeCompare(b.date||""));if(f==="today")arr=arr.filter(t=>t.date===today());if(f==="pending")arr=arr.filter(t=>!t.done);if(f==="done")arr=arr.filter(t=>t.done);$("taskList").innerHTML=arr.length?arr.map(taskHTML).join(""):'<div class="empty">No tasks in this view. Add one to get started.</div>';$("taskCount").textContent=`${arr.length} shown · ${data.tasks.filter(t=>t.done).length} completed overall`}
+$("addStudy").onclick=()=>{let title=$("studyTitle").value.trim();if(!title)return toast("Enter a topic or activity");data.study.push({id:uid(),type:$("studyType").value,title,date:$("studyDate").value||today(),duration:+$("studyDuration").value||0,notes:$("studyNotes").value});["studyTitle","studyDuration","studyNotes"].forEach(x=>$(x).value="");save();toast("Entry saved")};
+$("addWorkout").onclick=()=>{let duration=+$("workDuration").value;if(!duration||duration<1)return toast("Enter workout duration");data.workouts.push({id:uid(),type:$("workType").value,date:$("workDate").value||today(),duration,details:$("workDetails").value});$("workDuration").value="";$("workDetails").value="";save();toast("Workout saved")};
+$("addExpense").onclick=()=>{let name=$("expenseName").value.trim(),amount=+$("expenseAmount").value;if(!name||amount<=0)return toast("Enter description and valid amount");data.expenses.push({id:uid(),name,amount,cat:$("expenseCat").value,date:$("expenseDate").value||today()});$("expenseName").value="";$("expenseAmount").value="";save();toast("Expense saved")};
+$("addNote").onclick=()=>{let title=$("noteTitle").value.trim(),body=$("noteBody").value.trim();if(!title&&!body)return toast("Write a note first");data.notes.push({id:uid(),title:title||"Note",body,date:$("noteDate").value||today(),time:$("noteTime").value});$("noteTitle").value="";$("noteBody").value="";$("noteTime").value="";save();toast("Note saved")};
+$("saveFocus").onclick=()=>{data.focus[today()]=$("focusNote").value;localStorage.setItem("dailyTrackData",JSON.stringify(data));toast("Focus saved")};
+function openModal(type){let body="",title="";if(type==="habit"){title="Add a habit";body='<div class="field"><label>Habit name</label><input id="newHabit" placeholder="e.g. Drink enough water"></div><button style="margin-top:12px" onclick="saveHabit()">Add habit</button>'} $("modalTitle").textContent=title;$("modalBody").innerHTML=body;$("modalBack").style.display="flex"}
+function closeModal(){$("modalBack").style.display="none"}
+function saveHabit(){let n=$("newHabit").value.trim();if(!n)return toast("Enter a habit");data.habits.push({id:uid(),name:n});closeModal();save();toast("Habit added")}
+function checkHabit(id,checked){let k=today();data.habitChecks[k]??=[];data.habitChecks[k]=checked?[...new Set([...data.habitChecks[k],id])]:data.habitChecks[k].filter(x=>x!==id);save()}
+function canvasBars(id,labels,values){let c=$(id),ctx=c.getContext("2d"),w=c.width,h=c.height;ctx.clearRect(0,0,w,h);let max=Math.max(1,...values),pad=35,base=h-35,chartH=h-65,slot=(w-pad*2)/Math.max(1,labels.length);ctx.font="12px Arial";ctx.fillStyle="#718096";ctx.textAlign="center";labels.forEach((l,i)=>{let bh=values[i]/max*chartH,x=pad+i*slot+slot*.2;ctx.fillStyle="#5b67e8";ctx.fillRect(x,base-bh,slot*.6,bh);ctx.fillStyle="#718096";ctx.fillText(l,x+slot*.3,h-12);ctx.fillStyle="#344054";ctx.fillText(values[i],x+slot*.3,Math.max(12,base-bh-7))})}
+function render(){
+ const todays=data.tasks.filter(t=>t.date===today()),done=todays.filter(t=>t.done).length,pct=todays.length?done/todays.length*100:0,checks=data.habitChecks[today()]||[];
+ $("statTasks").textContent=`${done}/${todays.length}`;$("taskProgress").style.width=pct+"%";$("statHabits").textContent=`${checks.length}/${data.habits.length}`;$("statWorkout").textContent=sum(data.workouts.filter(x=>x.date===today()),x=>x.duration);$("statSpend").textContent=money(sum(data.expenses.filter(x=>x.date===today()),x=>x.amount));
+ $("dashTasks").innerHTML=todays.length?todays.slice(0,6).map(taskHTML).join(""):'<div class="empty">No tasks planned for today. Add a task to get started.</div>';$("focusNote").value=data.focus[today()]||"";
+ renderTasks();
+ let monthStudy=data.study.filter(x=>inMonth(x.date)),apps=monthStudy.filter(x=>x.type==="Job application").length,ints=monthStudy.filter(x=>x.type==="Interview").length,projs=monthStudy.filter(x=>x.type==="Project").length;
+ $("studyHours").textContent=(sum(monthStudy.filter(x=>x.type==="Study"),x=>x.duration)/60).toFixed(1)+"h";$("applications").textContent=apps;$("interviews").textContent=ints;$("projects").textContent=projs;
+ $("studyList").innerHTML=data.study.length?[...data.study].sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="item"><div class="item-main"><div class="item-title">${esc(x.title)}</div><div class="item-meta">${esc(x.type)} · ${dateLabel(x.date)} · ${x.duration} min ${x.notes?"· "+esc(x.notes):""}</div></div><button class="danger small" onclick="del('study','${x.id}')">×</button></div>`).join(""):'<div class="empty">No study or job entries yet.</div>';
+ $("workList").innerHTML=data.workouts.length?[...data.workouts].sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="item"><div class="item-main"><div class="item-title">${esc(x.type)} · ${x.duration} min</div><div class="item-meta">${dateLabel(x.date)} ${x.details?"· "+esc(x.details):""}</div></div><button class="danger small" onclick="del('workouts','${x.id}')">×</button></div>`).join(""):'<div class="empty">No workouts logged yet.</div>';
+ $("habitList").innerHTML=data.habits.length?data.habits.map(h=>`<div class="item"><label class="checkline item-main"><input type="checkbox" ${checks.includes(h.id)?"checked":""} onchange="checkHabit('${h.id}',this.checked)"><span class="item-title">${esc(h.name)}</span></label><span class="pill">${checks.includes(h.id)?"Done":"Pending"}</span></div>`).join(""):'<div class="empty">Add your first habit.</div>';
+ $("habitManage").innerHTML=data.habits.map(h=>`<div class="item"><div class="item-main item-title">${esc(h.name)}</div><button class="danger small" onclick="del('habits','${h.id}')">Remove</button></div>`).join("");
+ let exToday=sum(data.expenses.filter(x=>x.date===today()),x=>x.amount),exWeek=sum(data.expenses.filter(x=>isWeek(x.date)),x=>x.amount),exMonth=sum(data.expenses.filter(x=>inMonth(x.date)),x=>x.amount);
+ $("expenseToday").textContent=money(exToday);$("expenseWeek").textContent=money(exWeek);$("expenseMonth").textContent=money(exMonth);$("expenseEntries").textContent=data.expenses.filter(x=>inMonth(x.date)).length;
+ $("expenseList").innerHTML=data.expenses.length?[...data.expenses].sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="item"><div class="item-main"><div class="item-title">${esc(x.name)} · ${money(x.amount)}</div><div class="item-meta">${esc(x.cat)} · ${dateLabel(x.date)}</div></div><button class="danger small" onclick="del('expenses','${x.id}')">×</button></div>`).join(""):'<div class="empty">No expenses recorded yet.</div>';
+ $("noteList").innerHTML=data.notes.length?[...data.notes].sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="item"><div class="item-main"><div class="item-title">${esc(x.title)}</div><div class="item-meta">${dateLabel(x.date)} ${x.time?"· Reminder "+esc(x.time):""}<br>${esc(x.body)}</div></div><button class="danger small" onclick="del('notes','${x.id}')">×</button></div>`).join(""):'<div class="empty">No notes saved yet.</div>';
+ let days=[],vals=[],expvals=[];for(let i=6;i>=0;i--){let d=new Date();d.setDate(d.getDate()-i);let ds=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;days.push(d.toLocaleDateString("en-IN",{weekday:"short"}));vals.push(data.tasks.filter(t=>t.date===ds&&t.done).length);expvals.push(sum(data.expenses.filter(x=>x.date===ds),x=>x.amount))}
+ canvasBars("weeklyChart",days,vals);canvasBars("expenseChart",days,expvals);
+ $("weeklyBars").innerHTML=days.map((d,i)=>`<div class="barrow"><span>${d}</span><div class="bartrack"><i style="width:${Math.min(100,vals[i]/Math.max(1,...vals)*100)}%"></i></div><b>${vals[i]}</b></div>`).join("");
+ let monthlyTasks=data.tasks.filter(x=>inMonth(x.date)),monthlyDone=monthlyTasks.filter(x=>x.done).length;
+ $("monthlySummary").innerHTML=`<div class="stat-num">${monthlyDone}/${monthlyTasks.length}</div><div class="muted smalltext">Tasks completed this month</div><div class="progress"><i style="width:${monthlyTasks.length?monthlyDone/monthlyTasks.length*100:0}%"></i></div><p class="smalltext" style="margin-top:18px">Spending: <b>${money(exMonth)}</b></p><p class="smalltext">Habits checked today: <b>${checks.length}/${data.habits.length}</b></p>`;
+ $("reportStudy").textContent=(sum(monthStudy.filter(x=>x.type==="Study"),x=>x.duration)/60).toFixed(1)+"h";$("reportWorkout").textContent=sum(data.workouts.filter(x=>inMonth(x.date)),x=>x.duration)+" min";
+}
+$("exportBtn").onclick=()=>download("daily-track-backup.json",JSON.stringify(data,null,2),"application/json");
+$("csvBtn").onclick=()=>{let rows=[["Date","Description","Category","Amount"],...data.expenses.map(x=>[x.date,x.name,x.cat,x.amount])];download("expenses.csv",rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n"),"text/csv")};
+function download(name,content,type){let a=document.createElement("a"),url=URL.createObjectURL(new Blob([content],{type}));a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
+$("importBtn").onclick=()=>$("importFile").click();
+$("importFile").onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let d=JSON.parse(await f.text());if(!d.tasks||!d.habits)throw Error();data=d;save();toast("Backup imported")}catch(err){toast("Invalid backup file")}e.target.value=""};
+$("notifyBtn").onclick=async()=>{if(!("Notification"in window))return toast("Notifications are not supported in this browser");let p=await Notification.requestPermission();toast(p==="granted"?"Notifications enabled":"Permission not granted")};
+if("Notification"in window&&Notification.permission==="granted"){const fired=new Set();setInterval(()=>{let now=new Date(),hm=now.toTimeString().slice(0,5),ds=today(),minuteKey=ds+" "+hm;if(fired.has(minuteKey))return;let dueTasks=data.tasks.filter(t=>t.date===ds&&t.time===hm&&!t.done),dueNotes=data.notes.filter(n=>n.date===ds&&n.time===hm);if(dueTasks.length||dueNotes.length){fired.add(minuteKey);dueTasks.forEach(t=>new Notification("Daily Track reminder",{body:t.name}));dueNotes.forEach(n=>new Notification("Reminder: "+n.title,{body:n.body||"Your reminder"}))}},10000)}
+render();
+</script>
+<script>
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(err => console.warn("Offline setup unavailable:", err));
+  });
+}
+</script>
+</body>
+</html>
